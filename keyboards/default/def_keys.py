@@ -10,6 +10,9 @@ welcome_admin = ReplyKeyboardMarkup(
             KeyboardButton(text="👀 Mijozlar ma'lumotini olish"),
         ],
         [
+            KeyboardButton(text="🎯 QrCode olish"),
+        ],
+        [
             KeyboardButton(text="🏃‍♂️ Tarifni davom ettirish"),
         ],
         [

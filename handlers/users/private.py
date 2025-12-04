@@ -13,6 +13,8 @@ from keyboards.inline.inline_buttons import option
 from requests import patch
 from datetime import datetime
 import pytz
+from aiogram.types import BufferedInputFile
+from .utilities import generate_modern_qr_pdf
 
 # Tashkent timezone
 tz = pytz.timezone("Asia/Tashkent")
@@ -21,6 +23,30 @@ tz = pytz.timezone("Asia/Tashkent")
 VERSION = "/api/v1/"
 
 
+# Get CR Code
+@dp.message(F.text == "🎯 QrCode olish")
+async def gen_qr_code(msg: types.Message, state: FSMContext):
+    await bot.send_chat_action(msg.chat.id, ChatAction.TYPING)
+    await msg.answer("✒️ Linkni yuboring",reply_markup=back)
+    await state.set_state(UserStates.GenerateQrCode)
+
+@router.message(UserStates.GenerateQrCode)
+async def gen_qr_code_2(msg: types.Message, state: FSMContext):
+    await bot.send_chat_action(msg.chat.id, ChatAction.UPLOAD_DOCUMENT)
+
+    # PDF yaratish
+    pdf_path = await generate_modern_qr_pdf(msg.text)
+
+    # Faylni o'qish
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+
+    pdf_file = BufferedInputFile(pdf_bytes, filename="qr_code.pdf")
+
+
+    await msg.answer_document(pdf_file, reply_markup=welcome_admin, caption=f"Pdf fayl tayyor ✅")
+
+    await state.clear()
 
 # back to main
 @dp.message(F.text == "🔙 Orqaga qaytish")
@@ -31,14 +57,14 @@ async def back_to_admin(msg: types.Message, state: FSMContext):
 
 
 # Start bilan boshlash
-@dp.message(CommandStart(), )
+@dp.message(CommandStart())
 async def handle_start(message: types.Message):
     if message.chat.type == "private" and message.from_user.id == 1109659429:
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         await message.answer("👀 Quyidagilardan birortasini tanlang:", reply_markup=welcome_admin)
 
 
-    
+
 # New Client add
 @dp.message(F.text == "💠 Yangi mijoz qo'shish")
 async def add_new_client(msg: types.Message, state: FSMContext):

@@ -17,3 +17,6 @@ class UserStates(StatesGroup):
     complaint_location = State()
     client = State()
     client_location = State()
+
+
+    GenerateQrCode = State()
