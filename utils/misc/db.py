@@ -50,7 +50,7 @@ async def create_lead_1(user_id: int, tg_name: str, username: str, lang: str, ta
             INSERT INTO leads (id, tg_name, username, lang, tarif)
             VALUES ($1, $2, $3, $4, $5)
             ON CONFLICT (id) DO UPDATE
-            SET name = EXCLUDED.name,
+            SET tg_name = EXCLUDED.tg_name,
                 username = EXCLUDED.username,
                 lang = EXCLUDED.lang,
                 tarif = EXCLUDED.tarif
@@ -73,7 +73,7 @@ async def create_lead_2(user_id: int, real_name: str, number: str, business_type
                 business_long = $6
             WHERE
                 id = $1
-            RETURNING real_name;
+            RETURNING username;
         """, user_id, real_name, number, business_type, lat, long)
         print(f"User updated fully: {result}")
         return result

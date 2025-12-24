@@ -58,7 +58,7 @@ async def back_to_admin(msg: types.Message, state: FSMContext):
 
 
 # Start bilan boshlash faqat admin uchun
-@dp.message(CommandStart())
+@dp.message(F.text == "Admin")
 async def handle_start(message: types.Message):
     if message.chat.type == "private" and message.from_user.id == 1109659429:
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
