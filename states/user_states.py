@@ -1,5 +1,6 @@
 from aiogram.fsm.state import State, StatesGroup
 
+# for admins only
 class UserStates(StatesGroup):
     client = State()
     phone = State()
@@ -20,3 +21,11 @@ class UserStates(StatesGroup):
 
 
     GenerateQrCode = State()
+
+
+# for all leads
+class LeadStates(StatesGroup):
+    Name = State()
+    PhoneNumber = State()
+    BusinessType = State()
+    BusinessLocation = State()

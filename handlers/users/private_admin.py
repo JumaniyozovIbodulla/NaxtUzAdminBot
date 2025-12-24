@@ -56,7 +56,8 @@ async def back_to_admin(msg: types.Message, state: FSMContext):
     await msg.answer("Qaytganingizdan xursandman 😊", reply_markup=welcome_admin)
 
 
-# Start bilan boshlash
+
+# Start bilan boshlash faqat admin uchun
 @dp.message(CommandStart())
 async def handle_start(message: types.Message):
     if message.chat.type == "private" and message.from_user.id == 1109659429:

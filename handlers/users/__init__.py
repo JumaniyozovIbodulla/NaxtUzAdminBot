@@ -1,2 +1,2 @@
-from . import private
+from . import private_admin
 from . import utilities
