@@ -26,7 +26,6 @@ async def bot_start_all(message: types.Message, state: FSMContext):
     await message.answer(f"{translate["name"][lang]}", reply_markup=ReplyKeyboardRemove())
     await state.set_state(LeadStates.Name)
 
-
 @router.message(LeadStates.Name)
 async def get_name(msg: types.Message, state: FSMContext):
     await bot.send_chat_action(msg.chat.id, ChatAction.TYPING)
@@ -35,7 +34,6 @@ async def get_name(msg: types.Message, state: FSMContext):
 
     await msg.answer(f"{translate["phone_number"][lang]}", reply_markup=ReplyKeyboardRemove())
     await state.set_state(LeadStates.PhoneNumber)
-
 
 @router.message(LeadStates.PhoneNumber)
 async def get_phone(msg: types.Message, state: FSMContext):
@@ -54,8 +52,6 @@ async def get_phone(msg: types.Message, state: FSMContext):
 
     await msg.answer(f"{translate["business_location"][lang]}", reply_markup=ReplyKeyboardRemove())
     await state.set_state(LeadStates.BusinessLocation)
-
-
 
 @router.message(LeadStates.BusinessLocation)
 async def get_phone(msg: types.Message, state: FSMContext):
