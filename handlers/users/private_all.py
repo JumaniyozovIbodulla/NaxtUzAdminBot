@@ -10,7 +10,7 @@ from keyboards.inline.inline_buttons import choose_lang
 from filters.private import IsPrivate
 from aiogram.fsm.context import FSMContext
 from utils.misc.language import translate
-from utils.misc.db import create_lead_1, create_lead_2, get_lang
+from utils.misc.db import create_lead_1, create_lead_2, get_lang, get_user
 from states.user_states import LeadStates
 
 # Start bilan boshlash hamma uchun
@@ -63,11 +63,13 @@ async def get_phone(msg: types.Message, state: FSMContext):
         name = data["name"]
         phone_number = data["phone_number"]
         business_type = data["business_type"]
+        
 
         username = await create_lead_2(msg.from_user.id, name, phone_number, business_type, msg.location.latitude, msg.location.longitude)
         
+        way = await get_user(msg.from_user.id)
 
-        text = f"💸 Yangi Lead\n\n👤 Ismi: {name}\n🔗 Username: @{username}\n📞 Raqami: {phone_number}\n🎯 Biznes turi: {business_type}"
+        text = f"💸 Yangi Lead\n\n👤 Ismi: {name}\n🔗 Username: @{username}\n📞 Raqami: {phone_number}\n🎯 Biznes turi: {business_type}\n⚙️ Yo'nalish: {way}"
         hold = await bot.send_message(-1002765349062, text)
         await bot.send_location(-1002765349062, msg.location.latitude, msg.location.longitude, reply_to_message_id=hold.message_id)
 

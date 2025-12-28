@@ -42,6 +42,12 @@ async def get_lang(user_id: int):
         lang = await conn.fetchval("SELECT lang FROM leads WHERE id = $1;", user_id)
         return lang or "uz"
 
+async def get_user(user_id: int):
+    async with pool.acquire() as conn:
+        tariff = await conn.fetchval("SELECT tarif FROM leads WHERE id = $1;", user_id)
+        return tariff or ""
+
+
 
 
 async def create_lead_1(user_id: int, tg_name: str, username: str, lang: str, tarif: str):
