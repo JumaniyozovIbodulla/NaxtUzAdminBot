@@ -68,8 +68,8 @@ async def get_phone(msg: types.Message, state: FSMContext):
         
 
         text = f"💸 Yangi Lead\n\n👤 Ismi: {name}\n🔗 Username: @{username}\n📞 Raqami: {phone_number}\n🎯 Biznes turi: {business_type}"
-        hold = await bot.send_message(ADMINS, text)
-        await bot.send_location(ADMINS, msg.location.latitude, msg.location.longitude, reply_to_message_id=hold.message_id)
+        hold = await bot.send_message(-1002765349062, text)
+        await bot.send_location(-1002765349062, msg.location.latitude, msg.location.longitude, reply_to_message_id=hold.message_id)
 
         
     
