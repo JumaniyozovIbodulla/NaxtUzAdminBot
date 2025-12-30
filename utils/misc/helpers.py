@@ -37,3 +37,36 @@ async def is_valid_uuid(value: str) -> bool:
     except ValueError:
         return False
     
+async def is_valid_uz_phone(phone: str) -> bool:
+    if not isinstance(phone, str):
+        return False
+
+    parts = phone.split(" ")
+
+    # Format: +998 XX XXX XX XX → 6 ta qism bo‘lishi kerak
+    if len(parts) != 6:
+        return False
+
+    country, operator, part1, part2, part3, part4 = parts
+
+    # +998 tekshiruvi
+    if country != "+998":
+        return False
+
+    # Operator kodi: 90–99
+    if not operator.isdigit() or len(operator) != 2:
+        return False
+    if not (90 <= int(operator) <= 99):
+        return False
+
+    # Qolgan qismlar raqam va uzunliklari
+    if not (part1.isdigit() and len(part1) == 3):
+        return False
+    if not (part2.isdigit() and len(part2) == 2):
+        return False
+    if not (part3.isdigit() and len(part3) == 2):
+        return False
+    if not (part4.isdigit() and len(part4) == 2):
+        return False
+
+    return True

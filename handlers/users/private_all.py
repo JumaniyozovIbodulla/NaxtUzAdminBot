@@ -12,6 +12,7 @@ from aiogram.fsm.context import FSMContext
 from utils.misc.language import translate
 from utils.misc.db import create_lead_1, create_lead_2, get_lang, get_user
 from states.user_states import LeadStates
+from utils.misc.helpers import is_valid_uz_phone
 
 # Start bilan boshlash hamma uchun
 @dp.message(CommandStart(), IsPrivate())
@@ -38,11 +39,18 @@ async def get_name(msg: types.Message, state: FSMContext):
 @router.message(LeadStates.PhoneNumber)
 async def get_phone(msg: types.Message, state: FSMContext):
     await bot.send_chat_action(msg.chat.id, ChatAction.TYPING)
-    await state.update_data({"phone_number": msg.text})
-    lang = await get_lang(msg.from_user.id)
 
-    await msg.answer(f"{translate["business_type"][lang]}", reply_markup=ReplyKeyboardRemove())
-    await state.set_state(LeadStates.BusinessType)
+    if await is_valid_uz_phone(msg.text):
+        await state.update_data({"phone_number": msg.text})
+        lang = await get_lang(msg.from_user.id)
+
+        await msg.answer(f"{translate["business_type"][lang]}", reply_markup=ReplyKeyboardRemove())
+        await state.set_state(LeadStates.BusinessType)
+
+    else:
+        await msg.answer(f"{translate["phone_number"][lang]}", reply_markup=ReplyKeyboardRemove())
+        await state.set_state(LeadStates.PhoneNumber)
+
 
 @router.message(LeadStates.BusinessType)
 async def get_phone(msg: types.Message, state: FSMContext):
@@ -69,7 +77,7 @@ async def get_phone(msg: types.Message, state: FSMContext):
         
         way = await get_user(msg.from_user.id)
 
-        text = f"💸 Yangi Lead\n\n👤 Ismi: {name}\n🔗 Username: @{username}\n📞 Raqami: {phone_number}\n🎯 Biznes turi: {business_type}\n⚙️ Yo'nalish: {way}"
+        text = f"💸 Yangi Mijoz\n\n👤 Ismi: {name}\n🔗 Username: @{username}\n📞 Raqami: {phone_number}\n🎯 Biznes turi: {business_type}\n⚙️ Yo'nalish: {way}"
         hold = await bot.send_message(-1002765349062, text)
         await bot.send_location(-1002765349062, msg.location.latitude, msg.location.longitude, reply_to_message_id=hold.message_id)
 
